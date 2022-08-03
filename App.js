@@ -2,7 +2,9 @@ import { StyleSheet } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Screens
+import SplashScreen from './SplashScreen';
 import ViewController from './ViewController';
+import LoginScreen from './screens/LoginScreen';
 
 export default function App() {
 
@@ -16,7 +18,9 @@ export default function App() {
     return(
       <NavigationContainer>
         <Stack.Navigator screenOptions={screenOptions}>
+          <Stack.Screen name="SplashScreen" component={SplashScreen}/>
           <Stack.Screen name="ViewController" component={ViewController} />
+          <Stack.Screen name="LoginScreen" component={LoginScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     )
