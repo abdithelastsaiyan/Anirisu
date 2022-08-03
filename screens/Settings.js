@@ -3,11 +3,23 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { StatusBar } from "expo-status-bar";
 // Global State
 import { setGlobalState, useGlobalState } from "../ViewController";
+import { auth } from '../firebase';
 // Helpers 
 
 const Settings = () => {
 
     const [darkmode] = useGlobalState('darkmode');
+    const email = auth.currentUser.email
+
+    // -> MARK: ABMELDEN
+    const handleSignOut = () => {
+        auth
+        .signOut()
+        // .then(() => {
+        //   navigation.replace("Login");
+        // })
+        .catch((error) => alert(error.message));
+    };
 
     return(
         <View style={[styles.container, { backgroundColor: darkmode ? '#111' : '#fafafa'}]}>
@@ -25,10 +37,13 @@ const Settings = () => {
                     <Text style={{color: '#fff'}}>Dark</Text>
                 </TouchableOpacity>
             </View>
+            <Text>{email}</Text>
+            <TouchableOpacity onPress={handleSignOut}>
+                <Text>Abmelden</Text>
+            </TouchableOpacity>
             <StatusBar style={darkmode ? 'light' : 'dark'} />
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({

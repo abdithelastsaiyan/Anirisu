@@ -1,10 +1,57 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, Modal } from 'react-native'
 import { safeArea } from '../helpers/Screen';
+// Firebase
+import { auth } from "../firebase";
+import { getFirestore, collection, onSnapshot, doc } from "firebase/firestore";
+// Screens
+import Chat from './Chat';
 // ViewModels
 import ChatListElement from './viewModels/ChatListElement';
 
 const ChatRoom = () => {
+
+    //Navigation
+    //const navigation = useNavigation();
+
+    //Firebase
+    const userID = auth.currentUser.uid;
+    const database = getFirestore()
+
+    // State Variables
+    const [chats, setChats] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [noChats, setNoChats] = useState(false);
+    const [showChat, setShowChat] = useState(false);
+    const [currentChat, setCurrentChat] = useState()
+
+    // Functions
+    useEffect(() => {
+        console.log("getting chats...");
+        const unsubscribe = onSnapshot(
+        collection(database, "users", userID, "chats"),
+        (snapshot) => {
+            if (snapshot.docs.length > 0) {
+                setChats(snapshot.docs.map((doc) => doc));
+                setIsLoading(false);
+            } else {
+                setNoChats(true);
+            }
+        },
+        (error) => {
+            console.log("Error fetching stampcard data: " + error.message);
+        }
+        );
+    }, []);
+
+    const toggleShowChat = () => {
+        setShowChat(!showChat);
+    };
+
+    const setChat = (chat) => {
+        setShowChat(!showChat);
+        setCurrentChat(chat);
+      };
 
     // Beispiel Datensätze
     const chat1 = {
@@ -29,10 +76,28 @@ const ChatRoom = () => {
 
     return(
         <View style={styles.container}>
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={showChat}
+                presentationStyle={"pageSheet"}
+                onRequestClose={() => {
+                    setShowChat(false);
+                }}
+            >
+                <Chat data={currentChat}/>
+            </Modal>
             <SafeAreaView style={[styles.container, safeArea.AndroidSafeArea]}>
                 <Text style={{color: '#3a3a3a', fontSize: 28, fontWeight: '600', marginBottom: 25}}>Chats</Text>
-                <ChatListElement data={chat2}/>
-                <ChatListElement data={chat1}/>
+                {chats && !isLoading && (
+                    <View style={{width: '100%', alignItems: 'center'}}>
+                        {chats.map((chat) => {
+                            return(
+                                <ChatListElement key={chat.id} contactID={chat.id} data={chat.data()} chatOpener={setChat}/>
+                            )
+                        })}
+                    </View>
+                )}
             </SafeAreaView>
         </View>
     )
