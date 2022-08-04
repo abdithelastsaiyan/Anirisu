@@ -17,7 +17,7 @@ const Chat = ({data}) => {
     // State Variables
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [newMessage, setNewMessage] = useState();
+    const [newMessage, setNewMessage] = useState(null);
     const [noChat, setNoChat] = useState(false);
 
     const scrollViewRef = React.useRef();
@@ -61,37 +61,43 @@ const Chat = ({data}) => {
 
     // send message
     const sendMessage = async (message) => {
-        const docID = generateRandomString()
-        const date = generateDatestamp()
-        const time = generateTime()
-        try {
-            await setDoc(doc(database, "chats", data.chatID, "chat", docID), {
-                message: message,
-                UID: userID,
-                timestamp: Timestamp.now(),
-                date: date,
-                time: time
-            });
-            setNewMessage()
-        } catch (error) {
-            console.log(error.message);
+        if(message !== null){
+            const docID = generateRandomString()
+            const date = generateDatestamp()
+            const time = generateTime()
+            const textToSend = message
+            setNewMessage(null)
+            try {
+                await setDoc(doc(database, "chats", data.chatID, "chat", docID), {
+                    message: textToSend,
+                    UID: userID,
+                    timestamp: Timestamp.now(),
+                    date: date,
+                    time: time
+                });
+            } catch (error) {
+                console.log(error.message);
+            }
         }
     };
 
     return(
         <View style={{flex: 1, width: Screen.width, backgroundColor: '#eee'}}>
-            <View style={{width: Screen.width, height: Screen.width / 5, backgroundColor: '#00000010', flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{width: Screen.width, height: Screen.width / 5, backgroundColor: '#eee', flexDirection: 'row', alignItems: 'center'}}>
                 <Image 
                     source={{uri: data.profilepic}}
                     resizeMode='cover'
                     style={{width: Screen.width / 7.5, height: Screen.width / 7.5, marginLeft: 15, borderRadius: 50}}
                 />
                 <Text style={{color: '#3a3a3a', fontSize: 17, marginLeft: 15, fontWeight: '600'}}>{data.username}</Text>
+                <TouchableOpacity style={{position: 'absolute', right: 15}}>
+                    <Text>Schliesen</Text>
+                </TouchableOpacity>
             </View>
             <SafeAreaView style={{justifyContent: 'space-between', flex: 1}}
             >
                 <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
-                    <ScrollView style={{flex: 1, backgroundColor: '#00000020', width: Screen.width}}
+                    <ScrollView style={{flex: 1, backgroundColor: '#ddd', width: Screen.width}}
                             ref={scrollViewRef}
                             onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
                     >
@@ -113,23 +119,24 @@ const Chat = ({data}) => {
                             })}
                         </View>
                     </ScrollView>
-                    <View style={{width: Screen.width /1.1 , height: Screen.width / 6, backgroundColor: '#eee', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <View style={{height: Screen.width / 8.5, width: '82%', backgroundColor: '#00000020', borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}> 
+                    <View style={{width: Screen.width /1.1 , height: Screen.width / 6.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <View style={{height: Screen.width / 9, width: '85%', backgroundColor: '#fff', borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}> 
                             <TextInput 
                                 placeholder="  Nachricht"
-                                placeholderTextColor={"#fff"}
+                                placeholderTextColor={"#5a5a5a"}
                                 value={newMessage}
                                 onChangeText={(text) => setNewMessage(text)}
                                 style={styles.input}
                             />
                         </View>
-                        <TouchableOpacity style={{width: Screen.width / 9, height: Screen.width / 9, backgroundColor: '#d22b2b', borderRadius: 50, alignItems: 'center', justifyContent: 'center'}}
+                        <TouchableOpacity style={{width: Screen.width / 10, height: Screen.width / 10, backgroundColor: '#d22b2b', borderRadius: 50, alignItems: 'center', justifyContent: 'center'}}
                             onPress={() => sendMessage(newMessage)}
                         >
                             <Icon 
                                 name='send'
                                 type='fontawesome'
                                 color={'#eee'}
+                                size={20}
                             />
                         </TouchableOpacity>
                     </View>

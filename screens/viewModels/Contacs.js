@@ -4,22 +4,17 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import { auth } from '../../firebase';
 import {
     collection,
-    onSnapshot,
     getFirestore,
     doc,
     setDoc,
-    query,
     getDocs,
-    orderBy,
-    startAt,
-    endAt,
 } from "firebase/firestore";
 // ViewModels
 import ContactItem from './ContactItem';
 // Helpers
 import Screen from '../../helpers/Screen';
 
-const Contacts = ({chooser}) => {
+const Contacts = ({toggleView, setChat}) => {
 
     // Firebase
     const db = getFirestore();
@@ -45,12 +40,6 @@ const Contacts = ({chooser}) => {
     }, []);
 
     // diese funktion wird der subview übergeben und diese benutzt es
-    const chooseContact = (ID) => {
-        setChosenContact(ID)
-        
-    } 
-
-    // create Chat
 
 
     return(
@@ -62,9 +51,12 @@ const Contacts = ({chooser}) => {
                         <View style={{width: '100%', alignItems: 'center'}}>
                             {contactIDs.map((ID) => {
                                 return(
-                                    <ContactItem key={ID} ID={ID}/>
+                                    <ContactItem key={ID} ID={ID} toggleView={toggleView} setChat={setChat}/>
                                 )
                             })}
+                            <TouchableOpacity onPress={() => toggleView()}>
+                                <Text>close</Text>
+                            </TouchableOpacity>
                         </View>
                     )}
                 </ScrollView>

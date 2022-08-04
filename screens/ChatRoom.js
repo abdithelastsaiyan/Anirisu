@@ -52,20 +52,14 @@ const ChatRoom = () => {
         setShowChat(!showChat);
     };
 
+    const toggleShowContacts = () => {
+        setShowContacts(!showContacts);
+    };
+
     const setChat = (chat) => {
         setShowChat(!showChat);
         setCurrentChat(chat);
     };
-
-    const chooseContact = (contactID) => {
-        setShowContacts(!showContacts);
-        setChosenContact(contactID)
-        if(contactID){
-
-        }else{
-            console.log("hier muss eig die richtige ausführung hin")
-        }
-    }
 
     return(
         <View style={styles.container}>
@@ -91,7 +85,7 @@ const ChatRoom = () => {
                     setShowContacts(false);
                 }}
             >
-                <Contacts chooser={chooseContact}/>
+                <Contacts toggleView={toggleShowContacts} setChat={setChat}/>
             </Modal>
             <SafeAreaView style={[styles.container, safeArea.AndroidSafeArea]}>
                 <Text style={{color: '#3a3a3a', fontSize: 28, fontWeight: '600', marginBottom: 25}}>Chats</Text>
