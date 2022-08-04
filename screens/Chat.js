@@ -1,11 +1,10 @@
-import React, {useEffect,useState} from 'react';
-import { View, Text, Image, KeyboardAvoidingView, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, Platform} from 'react-native'
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, Image, KeyboardAvoidingView, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, Platform, ScrollView} from 'react-native'
 // Firebase
 import { auth } from '../firebase';
 import { getFirestore, collection, onSnapshot, doc, Timestamp, setDoc, getDocs, query, orderBy } from "firebase/firestore";
 // Helpers 
 import Screen from '../helpers/Screen';
-import { ScrollView } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import { generateRandomString, generateTime, generateDatestamp } from '../helpers/Utilities'
 
@@ -20,6 +19,8 @@ const Chat = ({data}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [newMessage, setNewMessage] = useState();
     const [noChat, setNoChat] = useState(false);
+
+    const scrollViewRef = React.useRef();
 
     // Functions
     // Fetch Messages
@@ -87,9 +88,13 @@ const Chat = ({data}) => {
                 />
                 <Text style={{color: '#3a3a3a', fontSize: 17, marginLeft: 15, fontWeight: '600'}}>{data.username}</Text>
             </View>
-            <SafeAreaView style={{justifyContent: 'space-between', flex: 1}}>
+            <SafeAreaView style={{justifyContent: 'space-between', flex: 1}}
+            >
                 <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
-                    <ScrollView style={{flex: 1, backgroundColor: '#00000020', width: Screen.width}}>
+                    <ScrollView style={{flex: 1, backgroundColor: '#00000020', width: Screen.width}}
+                            ref={scrollViewRef}
+                            onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+                    >
                         <View style={{width: '100%', alignItems: 'center', marginTop: 15, marginBottom: 10}}>
                             {messages.map((message) => {
                                 return(
