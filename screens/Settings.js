@@ -3,11 +3,18 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { StatusBar } from "expo-status-bar";
 // Global State
 import { setGlobalState, useGlobalState } from "../ViewController";
+// Firebase
 import { auth } from '../firebase';
+// Navigation
+import { useNavigation } from '@react-navigation/native';
 // Helpers 
 
 const Settings = () => {
 
+    // Navigation
+    const navigation = useNavigation()
+
+    // State Variables
     const [darkmode] = useGlobalState('darkmode');
     const email = auth.currentUser.email
 
@@ -15,9 +22,9 @@ const Settings = () => {
     const handleSignOut = () => {
         auth
         .signOut()
-        // .then(() => {
-        //   navigation.replace("Login");
-        // })
+        .then(() => {
+            navigation.replace("LoginScreen");
+        })
         .catch((error) => alert(error.message));
     };
 
