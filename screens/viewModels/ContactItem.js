@@ -36,12 +36,11 @@ const ContactItem = ({ID, toggleView, setChat}) => {
         if (docSnap.exists()) {
             toggleView(),
             console.log('es gibt schon einen chat mir dieser Person!')
-            try {
-                setChat()
-            } catch (error) {
-                console.log('niggaaaa')
-                console.log(error)
-            }
+            setChat({
+                chatID: data.chatID,
+                username: contactInfos.username,
+                profilepic: contactInfos.profilepic
+            })
         } else {
             const chatID = generateRandomString()
             const time = generateTime()
