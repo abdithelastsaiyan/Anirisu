@@ -90,13 +90,19 @@ const Chat = ({data}) => {
             <SafeAreaView style={{justifyContent: 'space-between', flex: 1}}>
                 <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
                     <ScrollView style={{flex: 1, backgroundColor: '#00000020', width: Screen.width}}>
-                        <View style={{width: '100%', alignItems: 'center', marginTop: 15}}>
+                        <View style={{width: '100%', alignItems: 'center', marginTop: 15, marginBottom: 10}}>
                             {messages.map((message) => {
                                 return(
-                                    <View key={message.timestamp} style={{width: '90%', alignItems: message.UID === userID ? 'flex-end' : 'flex-start'}}>
-                                        <View style={{padding: 10, backgroundColor: message.UID === userID ? '#d22b2b' : '#808080', marginBottom: 3, borderRadius: 15}}>
+                                    <View key={message.timestamp} style={{width: '90%', justifyContent: message.UID === userID ? 'flex-end' : 'flex-start', flexDirection: 'row', alignItems: 'center'}}>
+                                        {message.UID === userID && (
+                                            <Text style={{marginRight: 5, color: '#4a4a4a', fontSize: 10}}>{message.time}</Text>
+                                        )}
+                                        <View style={{padding: 10, backgroundColor: message.UID === userID ? '#d22b2b' : '#808080', marginBottom: 3, borderRadius: 15, maxWidth: '90%'}}>
                                             <Text style={{color: '#fff', fontWeight: '500'}}>{message.message}</Text>
                                         </View>
+                                        {message.UID !== userID && (
+                                            <Text style={{marginLeft: 5, color: '#4a4a4a', fontSize: 10}}>{message.time}</Text>
+                                        )}
                                     </View>
                                 )
                             })}
@@ -112,7 +118,7 @@ const Chat = ({data}) => {
                                 style={styles.input}
                             />
                         </View>
-                        <TouchableOpacity style={{width: Screen.width / 9, height: Screen.width / 9, backgroundColor: '#f00', borderRadius: 50, alignItems: 'center', justifyContent: 'center'}}
+                        <TouchableOpacity style={{width: Screen.width / 9, height: Screen.width / 9, backgroundColor: '#d22b2b', borderRadius: 50, alignItems: 'center', justifyContent: 'center'}}
                             onPress={() => sendMessage(newMessage)}
                         >
                             <Icon 
