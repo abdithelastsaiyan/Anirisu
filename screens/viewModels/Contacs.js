@@ -21,13 +21,15 @@ import Screen from '../../helpers/Screen';
 
 const Contacts = ({chooser}) => {
 
-    //Firebase
+    // Firebase
     const db = getFirestore();
     const userID = auth.currentUser.uid;
 
     // State Variables
     const [contactIDs, setContactsIDs] = useState();
     const [isLoading, setIsLoading] = useState(false);
+    const [chosenContact, setChosenContact] = useState();
+
 
     // Functions
     const fetchContactIDs = async () => {
@@ -41,6 +43,15 @@ const Contacts = ({chooser}) => {
             fetchContactIDs()
         }
     }, []);
+
+    // diese funktion wird der subview übergeben und diese benutzt es
+    const chooseContact = (ID) => {
+        setChosenContact(ID)
+        
+    } 
+
+    // create Chat
+
 
     return(
         <View style={{flex: 1, width: Screen.width, alignItems: 'center', backgroundColor: '#eee'}}>
