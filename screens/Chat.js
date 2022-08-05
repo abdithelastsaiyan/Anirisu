@@ -8,7 +8,7 @@ import Screen from '../helpers/Screen';
 import { Icon } from 'react-native-elements';
 import { generateRandomString, generateTime, generateDatestamp } from '../helpers/Utilities'
 
-const Chat = ({data}) => {
+const Chat = ({data, toggleChatView}) => {
 
     //Firebase
     const userID = auth.currentUser.uid;
@@ -90,8 +90,13 @@ const Chat = ({data}) => {
                     style={{width: Screen.width / 7.5, height: Screen.width / 7.5, marginLeft: 15, borderRadius: 50}}
                 />
                 <Text style={{color: '#3a3a3a', fontSize: 17, marginLeft: 15, fontWeight: '600'}}>{data.username}</Text>
-                <TouchableOpacity style={{position: 'absolute', right: 15}}>
-                    <Text>Schliesen</Text>
+                <TouchableOpacity style={{position: 'absolute', right: 15}} onPress={toggleChatView}>
+                        <Icon 
+                            name="chevron-down"
+                            type="feather"
+                            color={'#3a3a3a'}
+                            size={28}
+                        />
                 </TouchableOpacity>
             </View>
             <SafeAreaView style={{justifyContent: 'space-between', flex: 1}}

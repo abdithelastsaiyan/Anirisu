@@ -11,6 +11,7 @@ import Contacts from './viewModels/Contacs';
 import ChatListElement from './viewModels/ChatListElement';
 // Helpers
 import Screen from '../helpers/Screen';
+import { Icon } from 'react-native-elements';
 
 const ChatRoom = () => {
 
@@ -73,7 +74,7 @@ const ChatRoom = () => {
                     setShowChat(false);
                 }}
             >
-                <Chat data={currentChat}/>
+                <Chat data={currentChat} toggleChatView={() => {setShowChat(false)}}/>
             </Modal>
             {/* Kontakte Pop Up */}
             <Modal
@@ -96,27 +97,25 @@ const ChatRoom = () => {
                                 <ChatListElement key={chat.id} contactID={chat.id} data={chat.data()} chatOpener={setChat}/>
                             )
                         })}
-                        <View style={{width: '100%', alignItems: 'center', marginTop: 35}}>
-                            <TouchableOpacity style={{backgroundColor: '#d22b2b', width: Screen.width / 1.7, height: 55, alignItems: 'center', justifyContent: 'center', borderRadius: 30}}
-                                onPress={() => {setShowContacts(true)}}
-                            >
-                                <Text style={{color: '#fff', fontSize: 16, fontWeight: '500'}}>Neuen Chat beginnen!</Text>
-                            </TouchableOpacity>
-                        </View>
                     </ScrollView>
                 )}
                 {noChats && isLoading && (
                     <View style={{width: '100%', alignItems: 'center'}}>
                         <Text style={{color: '#3a3a3a', fontSize: 16, fontWeight: '300', marginTop: 100}}>Noch keine Chats vorhanden!</Text>
                         <View style={{width: '100%', alignItems: 'center', marginTop: 35}}>
-                            <TouchableOpacity style={{backgroundColor: '#d22b2b', width: Screen.width / 1.7, height: 55, alignItems: 'center', justifyContent: 'center', borderRadius: 30}}
-                                onPress={() => {setShowContacts(true)}}
-                            >
-                                <Text style={{color: '#fff', fontSize: 16, fontWeight: '500'}}>Neuen Chat beginnen!</Text>
-                            </TouchableOpacity>
                         </View>
                     </View>
                 )}
+                <TouchableOpacity style={{backgroundColor: '#d22b2b', width: 55, height: 55, alignItems: 'center', justifyContent: 'center', borderRadius: 30, position: 'absolute', bottom: 20, right: 0}}
+                    onPress={() => {setShowContacts(true)}}
+                >
+                    <Icon 
+                        name="mark-chat-unread"
+                        type="MaterialIcons"
+                        color={'#fff'}
+                        size={24}
+                    />
+                </TouchableOpacity>
             </SafeAreaView>
         </View>
     )
