@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Modal, ScrollView, TouchableOpacity } from 'react-native'
 import { safeArea } from '../helpers/Screen';
 // Firebase
 import { auth } from "../firebase";
-import { getFirestore, collection, onSnapshot, doc } from "firebase/firestore";
+import { getFirestore, collection, onSnapshot, getDocs, query, orderBy, limit } from "firebase/firestore";
 // Screens
 import Chat from './Chat';
 import Contacts from './viewModels/Contacs';
@@ -32,7 +32,7 @@ const ChatRoom = () => {
     const [chosenContact, setChosenContact] = useState()
 
     // Functions
-    useEffect(() => {
+    useLayoutEffect(() => {
         const unsubscribe = onSnapshot(
         collection(database, "users", userID, "chats"),
         (snapshot) => {
@@ -49,6 +49,7 @@ const ChatRoom = () => {
         );
     }, []);
 
+    // View Togglers
     const toggleShowChat = () => {
         setShowChat(!showChat);
     };
@@ -101,8 +102,7 @@ const ChatRoom = () => {
                 )}
                 {noChats && isLoading && (
                     <View style={{width: '100%', alignItems: 'center', flex: 1, justifyContent: 'center'}}>
-                        <Text style={{color: '#3a3a3a', fontSize: 16, fontWeight: '300'}}>Noch keine Chats vorhanden</Text>
-                        <Text style={{color: '#3a3a3a', fontSize: 16, fontWeight: '300', marginBottom: 50}}>Bitte keine neuen chats starten</Text>
+                        <Text style={{color: '#3a3a3a', fontSize: 16, fontWeight: '300', marginBottom: 50}}>Noch keine Chats vorhanden</Text>
                     </View>
                 )}
                 <TouchableOpacity style={{backgroundColor: '#d22b2b', width: 55, height: 55, alignItems: 'center', justifyContent: 'center', borderRadius: 30, position: 'absolute', bottom: 20, right: 0}}

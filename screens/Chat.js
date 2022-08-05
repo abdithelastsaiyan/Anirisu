@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View, Text, Image, KeyboardAvoidingView, SafeAreaView, TextInput, TouchableOpacity, StyleSheet, Platform, ScrollView} from 'react-native'
 // Firebase
 import { auth } from '../firebase';
-import { getFirestore, collection, onSnapshot, doc, Timestamp, setDoc, getDocs, query, orderBy } from "firebase/firestore";
+import { getFirestore, collection, onSnapshot, doc, Timestamp, setDoc, getDocs, query, orderBy, updateDoc } from "firebase/firestore";
 // Helpers 
 import Screen from '../helpers/Screen';
 import { Icon } from 'react-native-elements';
@@ -24,14 +24,27 @@ const Chat = ({data, toggleChatView}) => {
 
     // Functions
     // Fetch Messages
-    useEffect(() => {
-        console.log("getting chat...");
+    useLayoutEffect(() => {
         const chat = query(collection(database, "chats", data.chatID, "chat"), orderBy("timestamp", "asc"));
         const unsubscribe = onSnapshot(
         chat,
         (snapshot) => {
             if (snapshot.docs.length > 0) {
-                setMessages(snapshot.docs.map((doc) => doc.data()));
+                setMessages(snapshot.docs.map((doc) => {
+                    const messageID = doc.id
+                    const messageData = doc.data()
+                    if(messageData.UID !== userID && messageData.read === false){
+                        markMessageRead(messageID)
+                    }
+                    return {
+                        UID: messageData.UID,
+                        date: messageData.date,
+                        message: messageData.message,
+                        time: messageData.time,
+                        timestamp: messageData.timestamp,
+                        read: true,
+                    }
+                }));
                 setIsLoading(false);
             } else {
                 setNoChat(true);
@@ -41,23 +54,8 @@ const Chat = ({data, toggleChatView}) => {
             console.log("Error fetching stampcard data: " + error.message);
         }
         );
-        //fetchMessages().catch((err) => console.log(err));
+        return unsubscribe
     }, []);
-
-    const fetchMessages = async () => {
-        const activitiesRef = query(
-          collection(database, "chats", data.chatID, "chat"),
-          orderBy("timestamp", "asc")
-        );
-    
-        const querySnapshot = await getDocs(activitiesRef);
-        renderData(querySnapshot, setMessages, setIsLoading);
-    };
-
-    function renderData(querySnapshot, setState, setLoading) {
-        setState(querySnapshot.docs.map((doc) => doc));
-        setLoading(false);
-    }
 
     // send message
     const sendMessage = async (message) => {
@@ -73,7 +71,8 @@ const Chat = ({data, toggleChatView}) => {
                     UID: userID,
                     timestamp: Timestamp.now(),
                     date: date,
-                    time: time
+                    time: time,
+                    read: false,
                 });
             } catch (error) {
                 console.log(error.message);
@@ -81,8 +80,20 @@ const Chat = ({data, toggleChatView}) => {
         }
     };
 
+    // Mark Message as Read
+    const markMessageRead = async (messageID) => {
+        const messageRef = doc(database, "chats", data.chatID, "chat", messageID)
+        try {
+            updateDoc(messageRef, {
+                read: true,
+            })
+        } catch (error) {
+            console.log("es gab einen fehler beim markieren von read")
+        }
+    }
+
     return(
-        <View style={{flex: 1, width: Screen.width, backgroundColor: '#eee'}}>
+        <KeyboardAvoidingView style={{flex: 1, width: Screen.width, backgroundColor: '#eee'}} behavior="padding">
             <View style={{width: Screen.width, height: Screen.width / 5, backgroundColor: '#eee', flexDirection: 'row', alignItems: 'center'}}>
                 <Image 
                     source={{uri: data.profilepic}}
@@ -99,31 +110,36 @@ const Chat = ({data, toggleChatView}) => {
                         />
                 </TouchableOpacity>
             </View>
-            <SafeAreaView style={{justifyContent: 'space-between', flex: 1}}
-            >
-                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{justifyContent: 'space-between', flex: 1, alignItems: 'center'}}>
-                    <ScrollView style={{flex: 1, backgroundColor: '#ddd', width: Screen.width}}
+            <SafeAreaView style={{ flex: 1, alignItems: 'center'}}>
+                    <View style={{flex: 1, width: Screen.width}}>
+                        <Image 
+                            source={require("../assets/images/chatbackground.jpeg")}
+                            resizeMode='cover'
+                            style={{width: Screen.width, height: '100%'}}
+                        />
+                        <ScrollView style={{height: '100%', backgroundColor: '#ffffff80', width: Screen.width, position: 'absolute', left: 0, top: 0}}
                             ref={scrollViewRef}
                             onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
-                    >
-                        <View style={{width: '100%', alignItems: 'center', marginTop: 15, marginBottom: 10}}>
-                            {messages.map((message) => {
-                                return(
-                                    <View key={message.timestamp} style={{width: '90%', justifyContent: message.UID === userID ? 'flex-end' : 'flex-start', flexDirection: 'row', alignItems: 'center'}}>
-                                        {message.UID === userID && (
-                                            <Text style={{marginRight: 5, color: '#4a4a4a', fontSize: 10}}>{message.time}</Text>
-                                        )}
-                                        <View style={{padding: 10, backgroundColor: message.UID === userID ? '#d22b2b' : '#808080', marginBottom: 3, borderRadius: 15, maxWidth: '90%'}}>
-                                            <Text style={{color: '#fff', fontWeight: '500'}}>{message.message}</Text>
+                        >
+                            <View style={{width: '100%', alignItems: 'center', marginTop: 15, marginBottom: 10}}>
+                                {messages.map((message) => {
+                                    return(
+                                        <View key={message.timestamp} style={{width: '90%', justifyContent: message.UID === userID ? 'flex-end' : 'flex-start', flexDirection: 'row', alignItems: 'center'}}>
+                                            {message.UID === userID && (
+                                                <Text style={{marginRight: 5, color: '#3a3a3a', fontSize: 10}}>{message.time}</Text>
+                                            )}
+                                            <View style={{padding: 10, backgroundColor: message.UID === userID ? '#d22b2b' : '#606060', marginBottom: 3, borderRadius: 15, maxWidth: '90%'}}>
+                                                <Text style={{color: '#fff', fontWeight: '500'}}>{message.message}</Text>
+                                            </View>
+                                            {message.UID !== userID && (
+                                                <Text style={{marginLeft: 5, color: '#4a4a4a', fontSize: 10}}>{message.time}</Text>
+                                            )}
                                         </View>
-                                        {message.UID !== userID && (
-                                            <Text style={{marginLeft: 5, color: '#4a4a4a', fontSize: 10}}>{message.time}</Text>
-                                        )}
-                                    </View>
-                                )
-                            })}
-                        </View>
-                    </ScrollView>
+                                    )
+                                })}
+                            </View>
+                        </ScrollView>
+                    </View>
                     <View style={{width: Screen.width /1.1 , height: Screen.width / 6.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                         <View style={{height: Screen.width / 9, width: '85%', backgroundColor: '#fff', borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}> 
                             <TextInput 
@@ -145,9 +161,8 @@ const Chat = ({data, toggleChatView}) => {
                             />
                         </TouchableOpacity>
                     </View>
-                </KeyboardAvoidingView>
             </SafeAreaView>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 

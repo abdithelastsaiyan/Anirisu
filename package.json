@@ -25,7 +25,8 @@
     "react-native": "0.68.2",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~2.2.1",
-    "react-native-web": "0.17.7"
+    "react-native-web": "0.17.7",
+    "expo-haptics": "~11.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput } from 'react-native'
 // Firebase
 import { auth } from '../../firebase';
@@ -44,14 +44,14 @@ const Contacts = ({toggleView, setChat}) => {
         setIsLoading(false)
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (userID) {
             fetchContactIDs()
         }
     }, []);
 
     // searchUsers
-    useEffect(() => {
+    useLayoutEffect(() => {
         if(showSearchUsers){
             setIsLoadingUsers(true);
             onSnapshot(allUsersRef, (snapshot) => {
