@@ -63,7 +63,7 @@ const ChatRoom = () => {
     };
 
     return(
-        <View style={styles.container}>
+        <View style={{flex: 1, alignItems: 'center'}}>
             {/* Chat Pop Up */}
             <Modal
                 animationType="slide"
@@ -100,10 +100,9 @@ const ChatRoom = () => {
                     </ScrollView>
                 )}
                 {noChats && isLoading && (
-                    <View style={{width: '100%', alignItems: 'center'}}>
-                        <Text style={{color: '#3a3a3a', fontSize: 16, fontWeight: '300', marginTop: 100}}>Noch keine Chats vorhanden!</Text>
-                        <View style={{width: '100%', alignItems: 'center', marginTop: 35}}>
-                        </View>
+                    <View style={{width: '100%', alignItems: 'center', flex: 1, justifyContent: 'center'}}>
+                        <Text style={{color: '#3a3a3a', fontSize: 16, fontWeight: '300'}}>Noch keine Chats vorhanden</Text>
+                        <Text style={{color: '#3a3a3a', fontSize: 16, fontWeight: '300', marginBottom: 50}}>Bitte keine neuen chats starten</Text>
                     </View>
                 )}
                 <TouchableOpacity style={{backgroundColor: '#d22b2b', width: 55, height: 55, alignItems: 'center', justifyContent: 'center', borderRadius: 30, position: 'absolute', bottom: 20, right: 0}}
@@ -127,6 +126,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        width: Screen.width / 1.1
     }
 
 })
