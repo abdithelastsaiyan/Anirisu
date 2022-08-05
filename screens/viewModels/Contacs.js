@@ -97,7 +97,9 @@ const Contacts = ({toggleView, setChat}) => {
                         />
                     )}
                 </TouchableOpacity>
-                <Text style={{fontSize: 26, fontWeight: '600', color: '#3a3a3a'}}>Freunde</Text>
+                {!showSearchUsers && !showSearchFriends && (<Text style={{fontSize: 26, fontWeight: '600', color: '#3a3a3a'}}>Freunde</Text>)}
+                {showSearchUsers && !showSearchFriends && (<Text style={{fontSize: 26, fontWeight: '600', color: '#3a3a3a'}}>Suchen</Text>)}
+                {!showSearchUsers && showSearchFriends && (<Text style={{fontSize: 26, fontWeight: '600', color: '#3a3a3a'}}>Suchen</Text>)}
                 <TouchableOpacity style={{width: 50, height: 30, justifyContent: 'center'}} onPress={() => {setShowSearchUsers(!showSearchUsers), setShowSearchFriends(false)}}>
                     {!showSearchUsers && !showSearchFriends && (
                         <Icon 
@@ -156,7 +158,9 @@ const Contacts = ({toggleView, setChat}) => {
                             <View style={{width: '100%', alignItems: 'center'}}>
                                 {allUsers.map((user) => {
                                     return(
-                                        <ContactItem key={user.userID} ID={user.userID} toggleView={toggleView} setChat={setChat}/>
+                                        <View key={user.userID}>
+                                            {user.userID !== userID && (<ContactItem ID={user.userID} toggleView={toggleView} setChat={setChat}/>)}
+                                        </View>
                                     )
                                 })}
                             </View>
