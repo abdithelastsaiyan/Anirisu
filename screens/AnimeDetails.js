@@ -5,6 +5,7 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 // Helpers
 import Screen from '../helpers/Screen';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Icon } from 'react-native-elements';
 
 const AnimeDetails = (animeID) => {
 
@@ -47,7 +48,19 @@ const AnimeDetails = (animeID) => {
                         />
                     </View>
                     <View style={{width: Screen.width, flexDirection: 'row', marginBottom: 25}}>
-                        <View style={{position: 'absolute', top: -Screen.width / 6, left: 15}}>
+                        <View style={{
+                            position: 'absolute', 
+                            top: -Screen.width / 6, 
+                            left: 15, 
+                            shadowColor: "#999",
+                            shadowOffset: {
+                            width: 0,
+                            height: 0,
+                            },
+                            shadowOpacity: 0.5,
+                            shadowRadius: 4,
+                            elevation: 2
+                        }}>
                             <Image 
                                 source={{uri: data.cover}}
                                 resizeMode='cover'
@@ -67,6 +80,26 @@ const AnimeDetails = (animeID) => {
                                 })}
                             </View>
                         </View>
+                    </View>
+                    <View style={{width:'90%', alignItems: 'center', marginBottom: 20, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <TouchableOpacity style={{width: '47%', alignItems: 'center', justifyContent: 'center', backgroundColor: data.color, height: 45, borderRadius: 25, flexDirection: 'row'}}>
+                            <Icon 
+                                name='add-to-list'
+                                type='entypo'
+                                color={'#eee'}
+                                size={20}
+                            />
+                            <Text style={{color: '#fff', fontSize: 15, fontWeight: '500', marginLeft: 10}}>Zur Liste</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{width: '47%', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', height: 45, borderRadius: 25, flexDirection: 'row'}}>
+                            <Icon 
+                                name='share'
+                                type='entypo'
+                                color={data.color}
+                                size={20}
+                            />
+                            <Text style={{color: data.color, fontSize: 15, fontWeight: '500', marginLeft: 10}}>Teilen</Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={{width: '90%', flex: 1}}>
                         <Text style={{color: '#3a3a3a', fontSize: 13, marginBottom: 15}}>{data.description}</Text>
