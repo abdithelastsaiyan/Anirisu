@@ -60,8 +60,8 @@ const HomeScreen = () => {
             <View style={{marginTop: 15, width: Screen.width, flex: 1, backgroundColor: '#f0f0f0', alignItems: 'center'}}>
                 <FlatList
                     data={news}
-                    renderItem={({ item, index }) => (
-                        <NewsletterPost key={index} data={item} navigation={navigation}/>
+                    renderItem={({ item }) => (
+                        <NewsletterPost key={item.timestamp} data={item} navigation={navigation}/>
                     )}
                     style={{width: Screen.width}}
                     contentContainerStyle={{alignItems: 'center'}}

@@ -5,7 +5,7 @@ import { View, Image } from 'react-native'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 //Views:
 import HomeScreen from './screens/HomeScreen'
-import Search from './screens/Search'
+import List from './screens/List'
 import ChatRoom from './screens/ChatRoom'
 import Settings from './screens/Settings'
 // Firebase
@@ -68,14 +68,14 @@ const TabNavigator = () => {
             }}
         />
         <Tab.Screen 
-            name="Search" 
-            component={Search} 
+            name="List" 
+            component={List} 
             options={{
                 headerShown: false,
                 tabBarIcon: ({ focused }) => (
                     <Icon 
-                        name='search'
-                        type='ionicons'
+                        name='list'
+                        type='entypo'
                         color={ focused ? '#f00' : '#000'}
                     />
                 )

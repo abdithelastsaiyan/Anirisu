@@ -73,7 +73,7 @@ const AnimeDetails = (animeID) => {
                             <View style={{flexDirection: 'row', marginTop: 10, width: '90%'}}>
                                 {data.genre.map((genre) => {
                                     return(
-                                        <TouchableOpacity style={{marginRight: 5, backgroundColor: '#fff', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5}}>
+                                        <TouchableOpacity key={genre} style={{marginRight: 5, backgroundColor: '#fff', paddingVertical: 3, paddingHorizontal: 8, borderRadius: 5}}>
                                             <Text style={{color: '#3a3a3a', fontWeight: '500', fontSize: 12}}>{genre}</Text>
                                         </TouchableOpacity>
                                     )
