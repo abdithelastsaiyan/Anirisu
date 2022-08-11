@@ -15,5 +15,10 @@ const safeArea = StyleSheet.create({
     AndroidSafeArea: {
       flex: 1,
       paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
-    }
+    },
+
+    AndroidAndIOSSafeArea: {
+      flex: 1,
+      paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 50
+    },
 });
