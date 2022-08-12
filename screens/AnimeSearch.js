@@ -38,7 +38,7 @@ const AnimeSearch = () => {
     }, [])
 
     return(
-        <View style={[safeArea.AndroidAndIOSSafeArea, {flex: 1, alignItems: 'center'}]}>
+        <View style={[safeArea.AndroidAndIOSSafeArea, {flex: 1, alignItems: 'center', width: Screen.width}]}>
             <Text style={{color: '#3a3a3a', fontSize: 28, fontWeight: '600', marginBottom: 20}}>Suche</Text>
             <View style={{width: Screen.width / 1.1, height: 50, backgroundColor: '#ddd', borderRadius: 25, alignItems: 'center', marginBottom: 20}}>
                 <TextInput 
@@ -49,6 +49,7 @@ const AnimeSearch = () => {
                     onChangeText={(text) => setSearch(text)}
                 />
             </View>
+            <View style={{width: Screen.width, flex: 1}}>
             {animes && !isLoading && (
                 <FlatList
                     data={animes}
@@ -59,6 +60,7 @@ const AnimeSearch = () => {
                     contentContainerStyle={{alignItems: 'center'}}
                 />
             )}
+            </View>
         </View>
     )
 }
