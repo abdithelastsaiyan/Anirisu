@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 // Screens
@@ -44,11 +43,3 @@ export default function App() {
 
   return  <SignedInStack />
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

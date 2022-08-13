@@ -101,7 +101,6 @@ const List = () => {
             </SafeAreaView>
         </View>
     )
-
 }
 
 const styles = StyleSheet.create({
