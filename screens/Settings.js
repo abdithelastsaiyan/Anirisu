@@ -8,7 +8,7 @@ import { auth } from '../firebase';
 // Navigation
 import { useNavigation } from '@react-navigation/native';
 // Helpers 
-import Screen from '../helpers/Screen';
+import Screen, { safeArea } from '../helpers/Screen';
 
 
 const Settings = () => {
