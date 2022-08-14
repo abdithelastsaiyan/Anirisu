@@ -3,15 +3,18 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 // Firebase
 import { auth } from '../../firebase';
 import { doc, getDoc, getFirestore, query, onSnapshot, orderBy, limit, collection, where, getDocs } from "firebase/firestore";
+// Navigation
+import { useNavigation } from '@react-navigation/native';
 // Helpers 
 import Screen from '../../helpers/Screen'
 import haptic from '../../helpers/Haptics'
 // Screens
 import Chat from '../Chat';
 
-const ChatListElement = ({contactID, data, chatOpener}) => {
+const ChatListElement = ({contactID, data}) => {
 
     // Navigation
+    const navigation = useNavigation()
 
     // Firebase
     const userID = auth.currentUser.uid
@@ -89,12 +92,9 @@ const ChatListElement = ({contactID, data, chatOpener}) => {
     }, [isFetchingUnreadCounter]);
 
     return(
-        <TouchableOpacity onPress={() => {chatOpener({
-            contactID: contactID,
-            chatID: data.chatID,
-            username: contactInfos.username,
-            profilepic: contactInfos.profilepic
-        }); setUnreadMessages(0); setIsFetchingUnreadCounter(false); haptic('normal')}}>
+        <TouchableOpacity onPress={() => {navigation.push('Chat', {chatID: data.chatID, profilepic: contactInfos.profilepic, username: contactInfos.username, contactID: contactID}); 
+            setUnreadMessages(0); setIsFetchingUnreadCounter(false); haptic('normal')}}
+        >
             {contactInfos && !isLoading && (
                 <View style={styles.container}>
                     <Image 

@@ -6,6 +6,7 @@ import ViewController from './ViewController';
 import LoginScreen from './screens/LoginScreen';
 import AnimeDetails from './screens/AnimeDetails';
 import AnimeSearch from './screens/AnimeSearch';
+import Chat from "./screens/Chat";
 import NewsLetterDetails from "./screens/viewModels/NewsLetterDetails";
 
 export default function App() {
@@ -31,6 +32,13 @@ export default function App() {
             }}
           />
           <Stack.Screen name="AnimeSearch" component={AnimeSearch} 
+            options={{
+              headerShown: false,
+              gestureEnabled: true, 
+              ...TransitionPresets.SlideFromRightIOS, 
+            }}
+          />
+          <Stack.Screen name="Chat" component={Chat} 
             options={{
               headerShown: false,
               gestureEnabled: true, 

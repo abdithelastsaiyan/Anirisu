@@ -3,12 +3,18 @@ import { View, Text, Image, KeyboardAvoidingView, SafeAreaView, TextInput, Touch
 // Firebase
 import { auth } from '../firebase';
 import { getFirestore, collection, onSnapshot, doc, Timestamp, setDoc, getDocs, query, orderBy, updateDoc } from "firebase/firestore";
+// Navigation
+import { useNavigation } from '@react-navigation/native';
 // Helpers 
-import Screen from '../helpers/Screen';
+import Screen, {safeArea} from '../helpers/Screen';
 import { Icon } from 'react-native-elements';
 import { generateRandomString, generateTime, generateDatestamp } from '../helpers/Utilities'
 
-const Chat = ({data, toggleChatView}) => {
+const Chat = (data) => {
+
+    // Navigation
+    const navigation = useNavigation()
+    const chatData = data.route.params
 
     //Firebase
     const userID = auth.currentUser.uid;
@@ -25,7 +31,7 @@ const Chat = ({data, toggleChatView}) => {
     // Functions
     // Fetch Messages
     useLayoutEffect(() => {
-        const chat = query(collection(database, "chats", data.chatID, "chat"), orderBy("timestamp", "asc"));
+        const chat = query(collection(database, "chats", chatData.chatID, "chat"), orderBy("timestamp", "asc"));
         const unsubscribe = onSnapshot(
         chat,
         (snapshot) => {
@@ -66,7 +72,7 @@ const Chat = ({data, toggleChatView}) => {
             const textToSend = message
             setNewMessage(null)
             try {
-                await setDoc(doc(database, "chats", data.chatID, "chat", docID), {
+                await setDoc(doc(database, "chats", chatData.chatID, "chat", docID), {
                     message: textToSend,
                     UID: userID,
                     timestamp: Timestamp.now(),
@@ -82,7 +88,7 @@ const Chat = ({data, toggleChatView}) => {
 
     // Mark Message as Read
     const markMessageRead = async (messageID) => {
-        const messageRef = doc(database, "chats", data.chatID, "chat", messageID)
+        const messageRef = doc(database, "chats", chatData.chatID, "chat", messageID)
         try {
             updateDoc(messageRef, {
                 read: true,
@@ -93,24 +99,24 @@ const Chat = ({data, toggleChatView}) => {
     }
 
     return(
-        <KeyboardAvoidingView style={{flex: 1, width: Screen.width, backgroundColor: '#eee'}} behavior="padding">
-            <View style={{width: Screen.width, height: Screen.width / 5, backgroundColor: '#eee', flexDirection: 'row', alignItems: 'center'}}>
-                <Image 
-                    source={{uri: data.profilepic}}
-                    resizeMode='cover'
-                    style={{width: Screen.width / 7.5, height: Screen.width / 7.5, marginLeft: 15, borderRadius: 50}}
-                />
-                <Text style={{color: '#3a3a3a', fontSize: 17, marginLeft: 15, fontWeight: '600'}}>{data.username}</Text>
-                <TouchableOpacity style={{position: 'absolute', right: 15}} onPress={toggleChatView}>
-                        <Icon 
-                            name="chevron-down"
-                            type="feather"
-                            color={'#3a3a3a'}
-                            size={28}
-                        />
+        <SafeAreaView style={[safeArea.AndroidSafeArea,{flex: 1, width: Screen.width, backgroundColor: '#eee'}]}>
+            <View style={[{width: Screen.width, height: Screen.width / 7, backgroundColor: '#eee', flexDirection: 'row', alignItems: 'center'}]}>
+                <TouchableOpacity style={{marginLeft: 15,}}>
+                    <Icon 
+                        name="chevron-down"
+                        type="feather"
+                        color={'#3a3a3a'}
+                        size={28}
+                    />
                 </TouchableOpacity>
+                <Image 
+                    source={{uri: chatData.profilepic}}
+                    resizeMode='cover'
+                    style={{width: Screen.width / 10, height: Screen.width / 10, marginLeft: 15, borderRadius: 50}}
+                />
+                <Text style={{color: '#3a3a3a', fontSize: 17, marginLeft: 12, fontWeight: '600'}}>{chatData.username}</Text>
             </View>
-            <SafeAreaView style={{ flex: 1, alignItems: 'center'}}>
+            <KeyboardAvoidingView style={{ flex: 1, alignItems: 'center'}}>
                     <View style={{flex: 1, width: Screen.width}}>
                         <Image 
                             source={require("../assets/images/chatbackground.jpeg")}
@@ -140,7 +146,7 @@ const Chat = ({data, toggleChatView}) => {
                             </View>
                         </ScrollView>
                     </View>
-                    <View style={{width: Screen.width /1.1 , height: Screen.width / 6.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <KeyboardAvoidingView style={{width: Screen.width /1.1 , height: Screen.width / 6.5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                         <View style={{height: Screen.width / 9, width: '85%', backgroundColor: '#fff', borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}> 
                             <TextInput 
                                 placeholder="  Nachricht"
@@ -160,9 +166,9 @@ const Chat = ({data, toggleChatView}) => {
                                 size={20}
                             />
                         </TouchableOpacity>
-                    </View>
-            </SafeAreaView>
-        </KeyboardAvoidingView>
+                    </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     )
 }
 

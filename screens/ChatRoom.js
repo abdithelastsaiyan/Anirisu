@@ -4,6 +4,8 @@ import { safeArea } from '../helpers/Screen';
 // Firebase
 import { auth } from "../firebase";
 import { getFirestore, collection, onSnapshot, getDocs, query, orderBy, limit } from "firebase/firestore";
+// Navigation
+import { useNavigation } from '@react-navigation/native';
 // Screens
 import Chat from './Chat';
 import Contacts from './viewModels/Contacs';
@@ -16,7 +18,7 @@ import { Icon } from 'react-native-elements';
 const ChatRoom = () => {
 
     //Navigation
-    //const navigation = useNavigation();
+    const navigation = useNavigation();
 
     //Firebase
     const userID = auth.currentUser.uid;
@@ -65,18 +67,6 @@ const ChatRoom = () => {
 
     return(
         <View style={{flex: 1, alignItems: 'center'}}>
-            {/* Chat Pop Up */}
-            <Modal
-                animationType="slide"
-                transparent={false}
-                visible={showChat}
-                presentationStyle={"pageSheet"}
-                onRequestClose={() => {
-                    setShowChat(false);
-                }}
-            >
-                <Chat data={currentChat} toggleChatView={() => {setShowChat(false)}}/>
-            </Modal>
             {/* Kontakte Pop Up */}
             <Modal
                 animationType="slide"
@@ -95,7 +85,7 @@ const ChatRoom = () => {
                     <ScrollView style={{width: '100%'}}>
                         {chats.map((chat) => {
                             return(
-                                <ChatListElement key={chat.id} contactID={chat.id} data={chat.data()} chatOpener={setChat}/>
+                                <ChatListElement key={chat.id} contactID={chat.id} data={chat.data()}/>
                             )
                         })}
                     </ScrollView>
