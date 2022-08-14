@@ -9,6 +9,7 @@ import NewsletterPost from './viewModels/NewsletterPost';
 // Helpers 
 import Screen, { safeArea } from '../helpers/Screen'
 import { useGlobalState } from '../ViewController';
+import { StatusBar } from 'expo-status-bar';
 
 
 const HomeScreen = () => {
@@ -67,6 +68,7 @@ const HomeScreen = () => {
                     contentContainerStyle={{alignItems: 'center'}}
                 />
             </View>
+            <StatusBar style='dark' />
         </SafeAreaView>
     )
 

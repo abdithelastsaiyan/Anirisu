@@ -15,6 +15,7 @@ const NewsletterPost = ({data, navigation}) => {
         <TouchableOpacity 
             activeOpacity={0.75}
             style={styles.container}
+            onPress={() => {navigation.push('NewsLetterDetails', data); haptic('normal')}}
         >
             <TouchableOpacity 
                 activeOpacity={0.75}
