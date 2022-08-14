@@ -9,7 +9,7 @@ import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 // Helpers 
 import Screen from '../helpers/Screen';
-import { safeArea } from '../helpers/Screen';
+
 
 const Settings = () => {
 
