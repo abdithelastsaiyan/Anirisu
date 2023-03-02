@@ -19,7 +19,7 @@ const SplashScreen = () => {
         navigation.replace("LoginScreen");
       }
     });
-    return unsubscribe;
+    return unsubscribe();
   }, []);
 
   return (

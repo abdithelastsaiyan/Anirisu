@@ -32,18 +32,6 @@ const HomeScreen = () => {
 
   // Firebase
   const database = getFirestore();
-  const dummydata = [
-    {
-      animeID: "attackontitan",
-      name: "Attack on Titan",
-      titlepic:
-        "https://static.giga.de/wp-content/uploads/2015/05/attack-titan-rcm1600x1200u.jpg",
-      news: "Aot geht diesen kommenden Winter mit der Final-Season Part 3 zuende!",
-      image:
-        "https://img1.ak.crunchyroll.com/i/spire4/d01b87af96e21f5ca376d7dd273bd2d91655457422_main.jpg",
-      date: "am 09.08.2022, 09:12 Uhr",
-    },
-  ];
 
   // State Variables
   const [darkmode] = useGlobalState("darkmode");
