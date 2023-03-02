@@ -8,19 +8,17 @@ import {
   TouchableOpacity,
   Alert,
   Image,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 // Navigation
 import { useNavigation } from "@react-navigation/native";
 // Firebase
 import { auth } from "../firebase";
-import { doc, setDoc, getFirestore} from "firebase/firestore";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 // Helpers
 import Screen from "../helpers/Screen";
 
-const RegisterScreen = () => {
+const RegisterScreen = () => {};
 
-}
-
-export default RegisterScreen
+export default RegisterScreen;
