@@ -23,7 +23,7 @@ import { useNavigation } from "@react-navigation/native";
 import NewsletterPost from "./viewModels/NewsletterPost";
 // Helpers
 import Screen, { safeArea } from "../helpers/Screen";
-import { useGlobalState } from "../ViewController";
+import { useGlobalState } from "../helpers/globalState";
 import { StatusBar } from "expo-status-bar";
 
 const HomeScreen = () => {

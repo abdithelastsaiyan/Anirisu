@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 // Global State
-import { setGlobalState, useGlobalState } from "../ViewController";
+import { useGlobalState } from "../helpers/globalState";
 // Firebase
 import { auth } from "../firebase";
 // Navigation

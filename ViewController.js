@@ -12,17 +12,11 @@ import Settings from "./screens/Settings";
 import { doc, getDoc, getFirestore } from "firebase/firestore";
 // Helpers
 import { Icon } from "react-native-elements";
-import { createGlobalState } from "react-hooks-global-state";
 import { auth } from "./firebase";
+import { setGlobalState, useGlobalState } from "./helpers/globalState";
 
 // Variablen
 const Tab = createBottomTabNavigator();
-// --> Global
-const { setGlobalState, useGlobalState } = createGlobalState({
-  profilepic: "",
-  username: "",
-  darkmode: false,
-});
 
 const TabNavigator = () => {
   // Firebase
@@ -134,4 +128,3 @@ const ViewController = () => {
 };
 
 export default ViewController;
-export { setGlobalState, useGlobalState };
